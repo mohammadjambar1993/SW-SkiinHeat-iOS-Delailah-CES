@@ -1,0 +1,15 @@
+{
+  "originHash" : "c54c7b4f5ce7574cfe7e0926640852d13b4ea4de0b478f32b7fe21bd9877e227",
+  "pins" : [
+    {
+      "identity" : "sw-skiinble-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/myantandco/SW-SkiinBLE-iOS.git",
+      "state" : {
+        "branch" : "testBandCode",
+        "revision" : "f864ab76d089a429743f482806291f17acfb314e"
+      }
+    }
+  ],
+  "version" : 3
+}
