@@ -14,12 +14,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     private let skiinBLE = SkiinBLE()
-    
-    // ---------------------------------------------------------
-    // STEP 1: Initialize the new "Dual Manager" here
-    // ---------------------------------------------------------
-    private let dualPodManager = DualPodManager()
-    
     static let utils = OnboardingUtils()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -31,32 +25,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let didFinishOnboarding = UserDefaults.standard.value(forKey: "onboarding") as? Bool
-            
-            // ---------------------------------------------------------
-            // STEP 2: Inject the manager into the views below
-            // ---------------------------------------------------------
-            let rootVC = didFinishOnboarding != nil && didFinishOnboarding! 
-                ? UIHostingController(
-                    rootView: BottomNavigation()
-                        .environmentObject(self.skiinBLE)
-                        .environmentObject(self.dualPodManager) // <--- ADDED THIS LINE
-                  ) 
-                : UIHostingController(
-                    rootView: Onboarding()
-                        .environmentObject(self.skiinBLE)
-                        .environmentObject(SceneDelegate.utils)
-                        // Note: You can add it here too if the onboarding screen needs it
-                        .environmentObject(self.dualPodManager) 
-                  )
-            
+            let rootVC = didFinishOnboarding != nil && didFinishOnboarding! ? UIHostingController(rootView:BottomNavigation().environmentObject(self.skiinBLE)) : UIHostingController(rootView:Onboarding().environmentObject(self.skiinBLE).environmentObject(SceneDelegate.utils))
             window.rootViewController = rootVC
             window.overrideUserInterfaceStyle = .light
-            
-            if didFinishOnboarding != nil && didFinishOnboarding! { 
-                self.skiinBLE.start() 
-                // Optional: Start the dual manager immediately too
-                // self.dualPodManager.startScanning() 
-            }
+            if didFinishOnboarding != nil && didFinishOnboarding! { self.skiinBLE.start() }
             
             self.window = window
             window.makeKeyAndVisible()
@@ -92,13 +64,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     public func loadDashboard() {
-        // ---------------------------------------------------------
-        // STEP 3: Make sure it's included when reloading the dashboard too
-        // ---------------------------------------------------------
-        UIApplication.shared.windows.first?.rootViewController = UIHostingController(
-            rootView: BottomNavigation()
-                .environmentObject(self.skiinBLE)
-                .environmentObject(self.dualPodManager) // <--- ADDED THIS LINE
-        )
+        UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: BottomNavigation().environmentObject(self.skiinBLE))
     }
 }
+
